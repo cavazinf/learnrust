@@ -1,0 +1,66 @@
+// Define a struct to represent a product
+struct Product {
+    name: String,
+    description: String,
+    price: f64,
+    quantity: i32,
+}
+
+// Define a struct to represent the inventory
+struct Inventory {
+    products: Vec<Product>,
+}
+
+impl Inventory {
+    // Function to add a product to the inventory
+    fn add_product(&mut self, product: Product) {
+        self.products.push(product);
+    }
+
+    // Function to display the current inventory
+    fn display_inventory(&self) {
+        println!("Current Inventory:");
+        for (index, product) in self.products.iter().enumerate() {
+            println!("Product {}: {} - Price: ${} - Quantity: {}", index + 1, product.name, product.price, product.quantity);
+        }
+    }
+
+    // Function to update product quantity in the inventory
+    fn update_quantity(&mut self, product_name: &str, new_quantity: i32) {
+        for product in self.products.iter_mut() {
+            if product.name == product_name {
+                product.quantity = new_quantity;
+                println!("Quantity updated for product: {}", product_name);
+                return;
+            }
+        }
+        println!("Product not found in inventory");
+    }
+}
+
+fn main() {
+    // Create an empty inventory
+    let mut store_inventory = Inventory { products: Vec::new() };
+
+    // Add products to the inventory
+    store_inventory.add_product(Product {
+        name: String::from("Product A"),
+        description: String::from("Description of Product A"),
+        price: 10.0,
+        quantity: 20,
+    });
+
+    store_inventory.add_product(Product {
+        name: String::from("Product B"),
+        description: String::from("Description of Product B"),
+        price: 15.0,
+        quantity: 15,
+    });
+
+    // Display the current inventory
+    store_inventory.display_inventory();
+
+    // Update quantity of a product
+    store_inventory.update_quantity("Product A", 25);
+    store_inventory.display_inventory();
+}
