@@ -1,0 +1,62 @@
+trait Account {
+    fn deposit(&mut self, amount: f64) -> Result<(), String>;
+    fn withdraw(&mut self, amount: f64) -> Result<(), String>;
+    fn balance(&self) -> f64;
+}
+
+struct BankAccount {
+    account_number: u32,
+    holder_name: String,
+    balance: f64,
+}
+
+impl Account for BankAccount {
+    fn deposit(&mut self, amount: f64) -> Result<(), String> {
+        if amount > 0.0 {
+            self.balance += amount;
+            Ok(())
+        } else {
+            Err("Deposit amount must be greater than 0".to_string())
+        }
+    }
+
+    fn withdraw(&mut self, amount: f64) -> Result<(), String> {
+        if amount <= self.balance {
+            self.balance -= amount;
+            Ok(())
+        } else {
+            Err("Insufficient funds for withdrawal".to_string())
+        }
+    }
+
+    fn balance(&self) -> f64 {
+        self.balance
+    }
+}
+
+fn main() {
+    let mut account1 = BankAccount {
+        account_number: 12345,
+        holder_name: String::from("Alice"),
+        balance: 100.0,
+    };
+
+    let mut account2 = BankAccount {
+        account_number: 54321,
+        holder_name: String::from("Bob"),
+        balance: 50.0,
+    };
+
+    match account1.deposit(50.0) {
+        Ok(()) => println!("Deposit successful for Alice"),
+        Err(err) => println!("Deposit error for Alice: {}", err),
+    }
+
+    match account2.withdraw(75.0) {
+        Ok(()) => println!("Withdrawal successful for Bob"),
+        Err(err) => println!("Withdrawal error for Bob: {}", err),
+    }
+
+    println!("Alice's balance: {}", account1.balance());
+    println!("Bob's balance: {}", account2.balance());
+}
