@@ -1,0 +1,76 @@
+// Define an enum Operation to represent arithmetic operations
+enum Operation {
+    Add(f64, f64),
+    Subtract(f64, f64),
+    Multiply(f64, f64),
+    Divide(f64, f64),
+}
+
+// Function to calculate the result based on the Operation enum
+fn calculate(operation: Operation) -> f64 {
+    match operation {
+        Operation::Add(num1, num2) => num1 + num2,
+        Operation::Subtract(num1, num2) => num1 - num2,
+        Operation::Multiply(num1, num2) => num1 * num2,
+        Operation::Divide(num1, num2) => {
+            if num2 != 0.0 {
+                num1 / num2
+            } else {
+                println!("Division by zero is not allowed.");
+                f64::NAN
+            }
+        }
+    }
+}
+
+fn main() {
+    // Prompt the user to input the first number, operation, and second number
+    println!("Enter the first number: ");
+    let num1: f64 = match read_line().trim().parse() {
+        Ok(num) => num,
+        Err(_) => {
+            println!("Invalid input. Please enter a valid number.");
+            return;
+        }
+    };
+
+    println!("Enter the operation (+, -, *, /): ");
+    let operation_str = read_line().trim().to_string();
+
+    println!("Enter the second number: ");
+    let num2: f64 = match read_line().trim().parse() {
+        Ok(num) => num,
+        Err(_) => {
+            println!("Invalid input. Please enter a valid number.");
+            return;
+        }
+    };
+
+    // Create an Operation enum instance based on user input
+    let operation = match operation_str.as_str() {
+        "+" => Operation::Add(num1, num2),
+        "-" => Operation::Subtract(num1, num2),
+        "*" => Operation::Multiply(num1, num2),
+        "/" => Operation::Divide(num1, num2),
+        _ => {
+            println!("Invalid operation. Please enter a valid operation (+, -, *, /).");
+            return;
+        }
+    };
+
+    // Call the calculate function with the created Operation enum instance
+    let result = calculate(operation);
+
+    // Print the result to the console
+    match result {
+        res if res.is_nan() => (), // Do nothing if the result is NaN
+        _ => println!("Result: {}", result),
+    }
+}
+
+// Helper function to read input from the user
+fn read_line() -> String {
+    let mut input = String::new();
+    std::io::stdin().read_line(&mut input).expect("Failed to read input");
+    input
+}
