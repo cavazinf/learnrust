@@ -1,0 +1,30 @@
+struct FilterCondition<T> {
+    condition: T,
+}
+
+impl<T: PartialEq> FilterCondition<T> {
+    fn is_match(&self, item: &T) -> bool {
+        *item == self.condition
+    }
+}
+
+fn custom_filter<T>(collection: Vec<T>, filter: &FilterCondition<T>) -> Vec<T> {
+    let mut filtered_collection = Vec::new();
+
+    for item in collection {
+        if filter.is_match(&item) {
+            filtered_collection.push(item);
+        }
+    }
+
+    filtered_collection
+}
+
+fn main() {
+    let numbers = vec![1, 2, 3, 4, 5];
+    let filter_condition = FilterCondition { condition: 3 };
+
+    let filtered_numbers = custom_filter(numbers, &filter_condition);
+
+    println!("Filtered numbers: {:?}", filtered_numbers);
+}
